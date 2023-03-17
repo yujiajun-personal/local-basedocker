@@ -58,7 +58,7 @@ def publishArtifact = {
     */
 }
 
-node('MagicBox-Builder') {
+node {
     ciPipeline (
         initStage: init,
         customizedProperties: customizedProperties,
