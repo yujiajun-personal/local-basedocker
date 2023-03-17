@@ -1,7 +1,7 @@
 #!/usr/bin/groovy
 @Library('local-pipeline-lib@dev')_
 
-import com.trend.magicbox.config.Config
+import com.ximu.cicd.config.Config
 
 def init = {
     //Environment variables that are required for pipeline
