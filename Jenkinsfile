@@ -21,12 +21,7 @@ def customizedProperties = {
         [
             parameters(
                 [   
-                    string(name: 'purpose', defaultValue: 'Lab Automation testing', description: 'The purpose for the this testing'),
-                    choice(
-                        name:'platform',
-                        choices:'ESXI\nHyper-V',
-                        description:'The platform installing Service Gateway'
-                    )
+                    string(name: 'purpose', defaultValue: 'To build an common docker image', description: 'The purpose for the this testing')
                 ]
             ),
             buildDiscarder(
