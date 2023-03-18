@@ -42,7 +42,7 @@ def publishArtifact = {
     def imageName = utility.getImageName(env.SERVICE_NAME, imageTag)
     def latestImageName = utility.getImageName(env.SERVICE_NAME, latestImageTag)
     echo "image name: ${imageName}"
-    withDockerRegistry(credentialsId: "ecr:us-west-2:${Config.SG_ECR_CREDENTIAL_RW}", url: Config.SG_ECR_URL) {
+    withDockerRegistry(credentialsId: Config.DOCKERHUB_CREDENTIAL, url: Config.DOCKERHUB_URL) {
         IMAGE = docker.build(imageName, "--pull .")
         IMAGE.push()
         IMAGE.push(latestImageTag)
