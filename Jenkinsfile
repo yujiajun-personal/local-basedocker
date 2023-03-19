@@ -8,9 +8,9 @@ def init = {
     env.MAJOR_VERSION       = '1.0.0'
     env.QA_OWNERS           = 'yujiajun'
     env.RD_OWNERS           = 'yujiajun'
-    env.BUILD_VERSION       = utility.getBuildVersion(env.MAJOR_VERSION, env.BUILD_NUMBER)
-    echo "${env.BUILD_NUMBER}"
-    echo "${env.BUILD_VERSION}"
+    env.BUILD_VERSION       = utility.getBuildVersion(env.MAJOR_VERSION, env.BUILD_NUMBER) //example 1.0.0.00040
+    //echo "${env.BUILD_NUMBER}" example 40
+    //echo "${env.BUILD_VERSION}"
 }
 
 def customizedProperties = {
@@ -32,8 +32,8 @@ def customizedProperties = {
 
 def publishArtifact = {
     //build and push image
-    echo '1'
-    /*
+    echo "${env.BRANCH_NAME}"
+    echo "${env.BRANCH_NAME}"
     def imageTag = utility.getImageTag(env.BRANCH_NAME, env.BUILD_VERSION)
     def latestImageTag = utility.getImageTag(env.BRANCH_NAME, 'latest')
     def imageName = utility.getImageName(env.SERVICE_NAME, imageTag)
@@ -44,10 +44,17 @@ def publishArtifact = {
         IMAGE.push()
         IMAGE.push(latestImageTag)
     }
-    
+
+    withCredentials([usernamePassword(credentialsId: Config.DOCKERHUB_CREDENTIAL, passwordVariable: 'password', usernameVariable: 'username')]) {
+        sh """ docker login -u $username -p $password; \
+                docker pull ${Config.BUILDER_IMAGE_COMMON} 
+                echo ${Config.BUILDER_IMAGE_COMMON}
+        """   
+    }
+
     ciPipeline.ciResults.buildResult = 'SUCCESS'
     ciPipeline.ciResults.buildImages = "- ${imageName}<br>- ${latestImageName}"
-    */
+    
 }
 
 node {
