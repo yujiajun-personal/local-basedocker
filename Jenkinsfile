@@ -32,28 +32,27 @@ def customizedProperties = {
 
 def publishArtifact = {
     //build and push image
-    echo "${env.SERVICE_NAME}"
-    echo "${env.BRANCH_NAME}"
-    def imageTag = utility.getImageTag(env.BRANCH_NAME, env.BUILD_VERSION)
-    def latestImageTag = utility.getImageTag(env.BRANCH_NAME, 'latest')
+    git url:"",
+        credentialsId: Config.SSH_CREDENTIAL_FOR_PERSONAL_GITHUB,
+        branch: "master"
+
+    def imageTag = "${env.BUILD_VERSION}"
+    def latestImageTag = "latest"
     def imageName = utility.getImageName(env.SERVICE_NAME, imageTag)
     def latestImageName = utility.getImageName(env.SERVICE_NAME, latestImageTag)
     echo "image name: ${imageName}"
-    withDockerRegistry(credentialsId: Config.DOCKERHUB_CREDENTIAL, url: Config.DOCKERHUB_URL) {
-        IMAGE = docker.build(imageName, "--pull .")
-        IMAGE.push()
-        IMAGE.push(latestImageTag)
-    }
 
     withCredentials([usernamePassword(credentialsId: Config.DOCKERHUB_CREDENTIAL, passwordVariable: 'password', usernameVariable: 'username')]) {
         sh """ docker login -u $username -p $password; \
-                docker pull ${Config.BUILDER_IMAGE_COMMON} 
-                echo ${Config.BUILDER_IMAGE_COMMON}
+                docker build -t ${imageName}  -f ./Dockerfile .; \
+                docker push ${imageName}; \
+
+                docker tag ${imageName} ${latestImageName}; \
+                docker push ${latestImageName}
         """   
     }
 
     ciPipeline.ciResults.buildResult = 'SUCCESS'
-    ciPipeline.ciResults.buildImages = "- ${imageName}<br>- ${latestImageName}"
     
 }
 
