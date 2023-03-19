@@ -32,7 +32,7 @@ def customizedProperties = {
 
 def publishArtifact = {
     //build and push image
-    git url:"",
+    git url:"git@github.com:yujiajun-personal/local-basedocker.git",
         credentialsId: Config.SSH_CREDENTIAL_FOR_PERSONAL_GITHUB,
         branch: "master"
 
