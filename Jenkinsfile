@@ -8,12 +8,9 @@ def init = {
     env.MAJOR_VERSION       = '1.0.0'
     env.QA_OWNERS           = 'yujiajun'
     env.RD_OWNERS           = 'yujiajun'
-    env.BUILD_VERSION       = utility.getBuildVersion(env.MAJOR_VERSION, env.BUILD_NUMBER)  //Example: 1.0.0.00001
-
-    //ciPipeline.ciResults.enableUT = false
-    //ciPipeline.ciResults.enableSST = false
-    //ciPipeline.ciResults.enableSIT = false
-    //ciPipeline.ciResults.enableGroupNotification = false
+    env.BUILD_VERSION       = utility.getBuildVersion(env.MAJOR_VERSION, env.BUILD_NUMBER)
+    echo "${env.BUILD_NUMBER}"
+    echo "${env.BUILD_VERSION}"
 }
 
 def customizedProperties = {
@@ -35,7 +32,7 @@ def customizedProperties = {
 
 def publishArtifact = {
     //build and push image
-    sh "echo 1"
+    echo '1'
     /*
     def imageTag = utility.getImageTag(env.BRANCH_NAME, env.BUILD_VERSION)
     def latestImageTag = utility.getImageTag(env.BRANCH_NAME, 'latest')
