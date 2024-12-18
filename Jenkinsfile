@@ -1,5 +1,5 @@
 #!/usr/bin/groovy
-@Library('local-pipeline-lib@dev')_
+@Library('local-pipeline-lib@master')_
 import com.ximu.cicd.config.Config
 
 def init = {
