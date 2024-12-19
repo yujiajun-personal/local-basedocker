@@ -33,7 +33,7 @@ def customizedProperties = {
 def publishArtifact = {
     //build and push image
     git url:"git@github.com:yujiajun-personal/local-basedocker.git",
-        credentialsId: Config.SSH_CREDENTIAL_FOR_PERSONAL_GITHUB,
+        credentialsId: Config.CREDENTIAL_FOR_SSH_GITHUB,
         branch: "master"
 
     def imageTag = "${env.BUILD_VERSION}"
@@ -42,7 +42,7 @@ def publishArtifact = {
     def latestImageName = utility.getImageName(env.SERVICE_NAME, latestImageTag)
     echo "image name: ${imageName}"
 
-    withCredentials([usernamePassword(credentialsId: Config.DOCKERHUB_CREDENTIAL, passwordVariable: 'password', usernameVariable: 'username')]) {
+    withCredentials([usernamePassword(credentialsId: Config.CREDENTIAL_FOR_LOGIN_DOCKERHUB, passwordVariable: 'password', usernameVariable: 'username')]) {
         sh """ docker login -u $username -p $password; \
                 docker build -t ${imageName}  -f ./Dockerfile .; \
                 docker push ${imageName}; \
