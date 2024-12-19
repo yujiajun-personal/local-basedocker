@@ -25,22 +25,24 @@ def customizedProperties = {
                 logRotator(
                     daysToKeepStr: '365'
                 )
-            )
+            ),
+            disableConcurrentBuilds()
         ],
     )
 }
 
 def publishArtifact = {
-    //build and push image
-    git url:"git@github.com:yujiajun-personal/local-basedocker.git",
-        credentialsId: Config.CREDENTIAL_FOR_SSH_GITHUB,
-        branch: "master"
-
-    def imageTag = "${env.BUILD_VERSION}"
-    def latestImageTag = "latest"
+    def branchName = env.BRANCH_NAME
+    def imageTag = utility.getImageTag(env.BRANCH_NAME, env.BUILD_VERSION)
+    def latestImageTag = utility.getImageTag(env.BRANCH_NAME, "latest")
     def imageName = utility.getImageName(env.SERVICE_NAME, imageTag)
     def latestImageName = utility.getImageName(env.SERVICE_NAME, latestImageTag)
-    echo "image name: ${imageName}"
+    echo "image name: ${imageName}" //yujiajundocker/local-basedocker:dev-1.0.0.00008 or yujiajundocker/local-basedocker:1.0.0.00008
+
+    //build and push image
+    git url:"git@github.com:yujiajun-personal/local-httpserver.git",
+        credentialsId: Config.CREDENTIAL_FOR_LOGIN_DOCKERHUB,
+        branch: "${branchName}"
 
     withCredentials([usernamePassword(credentialsId: Config.CREDENTIAL_FOR_LOGIN_DOCKERHUB, passwordVariable: 'password', usernameVariable: 'username')]) {
         sh """ docker login -u $username -p $password; \
