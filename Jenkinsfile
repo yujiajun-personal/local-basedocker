@@ -32,6 +32,7 @@ def customizedProperties = {
 }
 
 def publishArtifact = {
+    env.BRANCH_NAME = "master"
     def branchName = env.BRANCH_NAME
     echo "a"
     echo "${env.BRANCH_NAME}"
@@ -45,7 +46,7 @@ def publishArtifact = {
     //build and push image
     git url:"git@github.com:yujiajun-personal/local-httpserver.git",
         credentialsId: Config.CREDENTIAL_FOR_LOGIN_DOCKERHUB,
-        branch: "${branchName}"
+        branch: "${env.BRANCH_NAME}"
 
     withCredentials([usernamePassword(credentialsId: Config.CREDENTIAL_FOR_LOGIN_DOCKERHUB, passwordVariable: 'password', usernameVariable: 'username')]) {
         sh """ docker login -u $username -p $password; \
