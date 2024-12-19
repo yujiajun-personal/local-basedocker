@@ -9,6 +9,7 @@ def init = {
     env.QA_OWNERS           = 'yujiajun'
     env.RD_OWNERS           = 'yujiajun'
     env.BUILD_VERSION       = utility.getBuildVersion(env.MAJOR_VERSION, env.BUILD_NUMBER) //example 1.0.0.00040
+    env.BRANCH_NAME         = "master"
     //echo "${env.BUILD_NUMBER}" example 40
     //echo "${env.BUILD_VERSION}"
 }
@@ -32,11 +33,6 @@ def customizedProperties = {
 }
 
 def publishArtifact = {
-    env.BRANCH_NAME = "master"
-    def branchName = env.BRANCH_NAME
-    echo "a"
-    echo "${env.BRANCH_NAME}"
-    echo "ab"
     def imageTag = utility.getImageTag(env.BRANCH_NAME, env.BUILD_VERSION)
     def latestImageTag = utility.getImageTag(env.BRANCH_NAME, "latest")
     def imageName = utility.getImageName(env.SERVICE_NAME, imageTag)
