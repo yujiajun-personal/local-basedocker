@@ -44,7 +44,7 @@ def publishArtifact = {
     echo "image name: ${imageName}" //yujiajundocker/local-basedocker:dev-1.0.0.00008 or yujiajundocker/local-basedocker:1.0.0.00008
 
     //build and push image
-    git url:"git@github.com:yujiajun-personal/local-httpserver.git",
+    git url:"git@github.com:yujiajun-personal/local-basedocker.git",
         credentialsId: Config.CREDENTIAL_FOR_LOGIN_DOCKERHUB,
         branch: "${env.BRANCH_NAME}"
 
