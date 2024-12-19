@@ -33,6 +33,9 @@ def customizedProperties = {
 
 def publishArtifact = {
     def branchName = env.BRANCH_NAME
+    echo "a"
+    echo "${env.BRANCH_NAME}"
+    echo "ab"
     def imageTag = utility.getImageTag(env.BRANCH_NAME, env.BUILD_VERSION)
     def latestImageTag = utility.getImageTag(env.BRANCH_NAME, "latest")
     def imageName = utility.getImageName(env.SERVICE_NAME, imageTag)
