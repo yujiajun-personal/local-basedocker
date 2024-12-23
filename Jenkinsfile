@@ -9,7 +9,7 @@ def init = {
     env.QA_OWNERS           = 'yujiajun'
     env.RD_OWNERS           = 'yujiajun'
     env.BUILD_VERSION       = utility.getBuildVersion(env.MAJOR_VERSION, env.BUILD_NUMBER) //example 1.0.0.00040
-    env.BRANCH_NAME         = "master"
+    //env.BRANCH_NAME         = "master"
     //echo "${env.BUILD_NUMBER}" example 40
     //echo "${env.BUILD_VERSION}"
 }
@@ -39,19 +39,13 @@ def publishArtifact = {
     def latestImageName = utility.getImageName(env.SERVICE_NAME, latestImageTag)
     echo "image name: ${imageName}" //yujiajundocker/local-basedocker:dev-1.0.0.00008 or yujiajundocker/local-basedocker:1.0.0.00008
 
-    //build and push image
-    git url:"git@github.com:yujiajun-personal/local-basedocker.git",
-        credentialsId: Config.CREDENTIAL_FOR_LOGIN_DOCKERHUB,
-        branch: "${env.BRANCH_NAME}"
+    docker.withRegistry(Config.DOCKERHUB_URL, Config.CREDENTIAL_FOR_LOGIN_DOCKERHUB) {
+        echo "${imageName}"
+        echo "${latestImageName}"
 
-    withCredentials([usernamePassword(credentialsId: Config.CREDENTIAL_FOR_LOGIN_DOCKERHUB, passwordVariable: 'password', usernameVariable: 'username')]) {
-        sh """ docker login -u $username -p $password; \
-                docker build -t ${imageName}  -f ./Dockerfile .; \
-                docker push ${imageName}; \
-
-                docker tag ${imageName} ${latestImageName}; \
-                docker push ${latestImageName}
-        """   
+        serviceImage = docker.build(imageName, "-f ./build/Dockerfile .")
+        serviceImage.push()
+        serviceImage.push(latestImageTag) 
     }
 
     ciPipeline.ciResults.buildResult = 'SUCCESS'
