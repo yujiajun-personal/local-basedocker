@@ -43,7 +43,7 @@ def publishArtifact = {
         echo "${imageName}"
         echo "${latestImageName}"
 
-        serviceImage = docker.build(imageName, "-f ./build/Dockerfile .")
+        serviceImage = docker.build(imageName, "-f ./Dockerfile .")
         serviceImage.push()
         serviceImage.push(latestImageTag) 
     }
