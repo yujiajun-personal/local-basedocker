@@ -5,11 +5,11 @@ import com.ximu.cicd.config.Config
 def init = {
     //Environment variables that are required for pipeline
     env.SERVICE_NAME        = 'local-basedocker'
+    env.BRANCH_NAME         = "master"
     env.MAJOR_VERSION       = '1.0.0'
     env.QA_OWNERS           = 'yujiajun'
     env.RD_OWNERS           = 'yujiajun'
     env.BUILD_VERSION       = utility.getBuildVersion(env.MAJOR_VERSION, env.BUILD_NUMBER) //example 1.0.0.00040
-    //env.BRANCH_NAME         = "master"
     //echo "${env.BUILD_NUMBER}" example 40
     //echo "${env.BUILD_VERSION}"
 }
