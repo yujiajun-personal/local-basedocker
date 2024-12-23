@@ -4,6 +4,7 @@ RUN set -eux; \
 # Install fundamental dependencies
     yum -y update; \
     yum -y install \
+        vim \
         python3-pip \
     ; \
 # Install libraries of python3
