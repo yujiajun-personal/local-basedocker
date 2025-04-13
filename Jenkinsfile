@@ -66,7 +66,7 @@ node {
         initStage: init,
         customizedProperties: customizedProperties,
         publishArtifactStage: publishArtifact,
-        completionWorkStage:completionWork
+        completionWorkStage:completionWork,
         cleanupStage:cleanup
     )
 }
