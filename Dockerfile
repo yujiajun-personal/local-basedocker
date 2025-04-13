@@ -1,7 +1,7 @@
 FROM amazonlinux:latest
 
 RUN set -eux; \
-# Install fundamental dependencies
+# Install fundamental dependencies 
     yum -y update; \
     yum -y install \
         vim \
