@@ -53,8 +53,12 @@ def publishArtifact = {
     
 }
 
-def cleanup = {
+def completionWork = {
     sh "docker rmi -f \$(docker images --filter='reference=*/*${env.SERVICE_NAME}*:${imageTag}' -q) || echo no service docker image to remove"
+}
+
+def cleanup = {
+    sh "docker rmi -f \$(docker images --filter='reference=*/*${env.SERVICE_NAME}*' -q) || echo no service docker image to remove"
 }
 
 node {
@@ -62,6 +66,7 @@ node {
         initStage: init,
         customizedProperties: customizedProperties,
         publishArtifactStage: publishArtifact,
-        completionWorkStage:cleanup
+        completionWorkStage:completionWork
+        cleanupStage:cleanup
     )
 }
