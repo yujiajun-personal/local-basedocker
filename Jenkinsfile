@@ -58,7 +58,7 @@ def completionWork = {
 }
 
 def cleanup = {
-    def imageTag = utility.getImageTag(env.BRANCH_NAME, env.BUILD_VERSION)
+    //deletw with image id, it works, but some images will be some the same id
     sh "docker rmi -f \$(docker images --filter='reference=*/*${env.SERVICE_NAME}*' -q) || echo no service docker image to remove"
 }
 
