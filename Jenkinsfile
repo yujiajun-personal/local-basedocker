@@ -46,6 +46,7 @@ def publishArtifact = {
         serviceImage = docker.build(imageName, "-f ./Dockerfile .")
         serviceImage.push()
         serviceImage.push(latestImageTag)
+        serviceImage.rmi()
     }
     //sh """ docker rmi -f $(docker images | grep '${env.SERVICE_NAME}' | awk '{print \$3')"""
     ciPipeline.ciResults.buildResult = 'SUCCESS'
@@ -53,7 +54,7 @@ def publishArtifact = {
 }
 
 def cleanup = {
-    sh "docker rmi -f \$(docker images --filter='reference=*/*/*${env.SERVICE_NAME}*' -q) || echo no service docker image to remove"
+    sh "docker rmi -f \$(docker images --filter='reference=*/*${env.SERVICE_NAME}*:${imageTag}' -q) || echo no service docker image to remove"
 }
 
 node {
@@ -61,6 +62,6 @@ node {
         initStage: init,
         customizedProperties: customizedProperties,
         publishArtifactStage: publishArtifact,
-        cleanupStage:cleanup
+        completionWorkStage:cleanup
     )
 }
