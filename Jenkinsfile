@@ -45,9 +45,9 @@ def publishArtifact = {
 
         serviceImage = docker.build(imageName, "-f ./Dockerfile .")
         serviceImage.push()
-        serviceImage.push(latestImageTag) 
+        serviceImage.push(latestImageTag)
     }
-
+    sh "docker rmi -f $(docker images | grep '${env.SERVICE_NAME}' | awk '{print $3}')"
     ciPipeline.ciResults.buildResult = 'SUCCESS'
     
 }
