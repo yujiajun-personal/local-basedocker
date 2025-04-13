@@ -53,10 +53,15 @@ def publishArtifact = {
     
 }
 
+def cleanup = {
+    sh "docker rmi -f \$(docker images --filter='reference=*/*/*${env.SERVICE_NAME}*' -q) || echo no service docker image to remove"
+}
+
 node {
     ciPipeline (
         initStage: init,
         customizedProperties: customizedProperties,
-        publishArtifactStage: publishArtifact
+        publishArtifactStage: publishArtifact,
+        cleanupStage:cleanup
     )
 }
