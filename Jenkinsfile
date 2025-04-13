@@ -43,7 +43,7 @@ def publishArtifact = {
         echo "${imageName}"
         echo "${latestImageName}"
 
-        serviceImage = docker.build(imageName, "-f ./Dockerfile .")
+        def serviceImage = docker.build(imageName, "-f ./Dockerfile .")
         serviceImage.push()
         serviceImage.push(latestImageTag)
     }
@@ -53,10 +53,12 @@ def publishArtifact = {
 }
 
 def completionWork = {
+    def imageTag = utility.getImageTag(env.BRANCH_NAME, env.BUILD_VERSION)
     sh "docker rmi -f \$(docker images --filter='reference=*/*${env.SERVICE_NAME}*:${imageTag}' -q) || echo no service docker image to remove"
 }
 
 def cleanup = {
+    def imageTag = utility.getImageTag(env.BRANCH_NAME, env.BUILD_VERSION)
     sh "docker rmi -f \$(docker images --filter='reference=*/*${env.SERVICE_NAME}*' -q) || echo no service docker image to remove"
 }
 
